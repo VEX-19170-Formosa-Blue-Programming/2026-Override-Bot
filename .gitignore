@@ -6,6 +6,9 @@
 *.bin
 *.elf
 
+# MacOS
+*.DS_Store
+
 # PROS
 bin/
 .vscode/
