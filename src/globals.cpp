@@ -6,15 +6,15 @@ uint frame_count = 0;
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 
-//Chassis
+// Chassis
 pros::MotorGroup left_mg({1, -2, 3});
 pros::MotorGroup right_mg({-4, 5, -6});
 
-//Sensors
+// Sensors
 pros::Imu imu_sensor(17);
 
-//Intake
+// Intake
+pros::MotorGroup intake({9, -10});
 
-
-//Life
+// Lift
 pros::MotorGroup lift({7, -8});

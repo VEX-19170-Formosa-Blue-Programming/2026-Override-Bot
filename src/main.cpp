@@ -7,7 +7,7 @@
  // Framework files
 #include "main.h"
 
-// Headers
+// Headers	
 #include "drivetrain.h"
 #include "globals.h"
 
@@ -104,7 +104,7 @@ void opcontrol() {
 	if (false) {
 		// User-controlled mode
 		pros::lcd::set_text(3, "User-controlled mode initialized");
-		
+
 		while (true) {
 			// Get user input
 			int dir = master.get_analog(ANALOG_LEFT_Y);    // Gets amount forward/backward from left joystick
