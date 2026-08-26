@@ -4,17 +4,16 @@
  * task, not resume it from where it left off.
  * */
 
- // Framework files
+// Framework files
 #include "main.h"
 
-// Headers	
+// Headers
 #include "drivetrain.h"
 #include "globals.h"
 
 // https://pros.cs.purdue.edu/v5/api/cpp/motors.html
 
 // A callback function for LLEMU's center button.
-
 void on_center_button() {
 	static bool pressed = false;
 	pressed = !pressed;
@@ -43,7 +42,6 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-
 void disabled() {
 
 }
@@ -57,7 +55,6 @@ void disabled() {
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-
 void competition_initialize() {
 
 }
@@ -74,19 +71,49 @@ void competition_initialize() {
  * from where it left off.
  */
 
+// Entry point for autonomous function (used for manual/testing invocation from opcontrol)
+void run_autonomous() {
+	autonomous();
+}
+
 void autonomous() {
 
 	pros::lcd::set_text(3, "Autonomous mode initialized");
 
-	while (frame_count < 1000) {
+	frame_count = 0;  // Reset frame count
+	const float auton_time_limit = 10.0f;  // Time in seconds for autonomous mode
 
-		// Move the robot in a circle
-		arcade_drive_offset(sin(frame_count * 0.1), cos(frame_count * 0.1));
+	while (true) {
+		float elapsed = frame_count * 0.02f;
+		if (elapsed >= auton_time_limit) {
+			break;
+		}
+
+		if (master.get_digital(DIGITAL_UP)) {
+			pros::lcd::set_text(3, "User-controlled mode initialized");
+			return;  // Exit autonomous mode early if the up button is pressed
+		}
+
+		// Move the robot in a circle.
+		// mult by 127 to match the -127..127 range
+		arcade_drive_offset(sin(frame_count * 0.1) * 127, cos(frame_count * 0.1) * 127);
+
+		pros::lcd::set_text(4, "Time left: " + std::to_string(auton_time_limit - elapsed) + " seconds");
+
 		pros::delay(20);
-
 		frame_count++;
-		pros::lcd::set_text(4, "Frame count: " + std::to_string(frame_count));
 	}
+
+	pros::lcd::set_text(4, "Autonomous mode complete");
+
+	int countdown = 3;
+	while (countdown > 0) {
+		pros::lcd::set_text(5, "Return to opcontrol in " + std::to_string(countdown) + " seconds...");
+		pros::delay(1000);
+		countdown--;
+	}
+	pros::lcd::clear_line(5);
+	pros::lcd::set_text(3, "User-controlled mode initialized");
 }
 
 /**
@@ -101,20 +128,26 @@ void autonomous() {
 
 void opcontrol() {
 
-	if (false) {
-		// User-controlled mode
-		pros::lcd::set_text(3, "User-controlled mode initialized");
+	// User-controlled mode
+	pros::lcd::set_text(3, "User-controlled mode initialized");
 
-		while (true) {
-			// Get user input
-			int dir = master.get_analog(ANALOG_LEFT_Y);    // Gets amount forward/backward from left joystick
-			int turn = master.get_analog(ANALOG_RIGHT_X);  // Gets the turn left/right from right joystick
-			arcade_drive_offset(dir, turn);
+	while (true) {
+
+		// Handle controller connection status
+		if (!master.is_connected()) {
+			pros::delay(20);
+			continue;
 		}
-	} else {
-		// Autonomous mode
-		autonomous();
-	}
 
-	pros::delay(20);
+		if (master.get_digital(DIGITAL_UP)) {
+			run_autonomous();  // Switch to autonomous mode (testing only)
+		}
+
+		// Get user input
+		int dir = master.get_analog(ANALOG_LEFT_Y);    // Gets amount forward/backward from left joystick
+		int turn = master.get_analog(ANALOG_RIGHT_X);  // Gets the turn left/right from right joystick
+		arcade_drive_offset(dir, turn);
+
+		pros::delay(20);
+	}
 }
