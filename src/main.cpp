@@ -1,3 +1,7 @@
+ /*
+ * TO ADJUST ROBOT SETTINGS, GO TO globals.cpp
+ * */
+
 /*
  * If the robot is disabled or communications is lost, the
  * operator control task will be stopped. Re-enabling the robot will restart the
@@ -10,6 +14,10 @@
 // Headers
 #include "drivetrain.h"
 #include "globals.h"
+#include "intake.h"
+
+#include <algorithm>
+#include <cmath>
 
 // https://pros.cs.purdue.edu/v5/api/cpp/motors.html
 
@@ -31,6 +39,7 @@ void on_center_button() {
  */
 void initialize() {
 	imu_sensor.reset();
+	pros::delay(1000);
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
 
@@ -72,6 +81,7 @@ void competition_initialize() {
  */
 
 // Entry point for autonomous function (used for manual/testing invocation from opcontrol)
+
 void run_autonomous() {
 	autonomous();
 }
@@ -90,19 +100,21 @@ void autonomous() {
 		}
 
 		if (master.get_digital(DIGITAL_UP)) {
+			stop_drive();
 			pros::lcd::set_text(3, "User-controlled mode initialized");
 			return;  // Exit autonomous mode early if the up button is pressed
 		}
 
 		// Move the robot in a circle.
 		// mult by 127 to match the -127..127 range
-		arcade_drive_offset(sin(frame_count * 0.1) * 127, cos(frame_count * 0.1) * 127);
+		arcade_drive_offset(sin(frame_count * 0.1) * 127.0, cos(frame_count * 0.1) * 127.0, ROBOT_SPEED);
 
 		pros::lcd::set_text(4, "Time left: " + std::to_string(auton_time_limit - elapsed) + " seconds");
 
 		pros::delay(20);
 		frame_count++;
 	}
+	stop_drive();
 
 	pros::lcd::set_text(4, "Autonomous mode complete");
 
@@ -139,15 +151,19 @@ void opcontrol() {
 			continue;
 		}
 
-		if (master.get_digital(DIGITAL_UP)) {
-			run_autonomous();  // Switch to autonomous mode (testing only)
-		}
-
 		// Get user input
 		int dir = master.get_analog(ANALOG_LEFT_Y);    // Gets amount forward/backward from left joystick
 		int turn = master.get_analog(ANALOG_RIGHT_X);  // Gets the turn left/right from right joystick
-		arcade_drive_offset(dir, turn);
+		arcade_drive_offset(dir, turn, ROBOT_SPEED);
+
+		const int intake_power = master.get_digital(DIGITAL_R1) ? 127 :
+			master.get_digital(DIGITAL_R2) ? -127 : 0;
+		const int lift_power = master.get_digital(DIGITAL_L1) ? 127 :
+			master.get_digital(DIGITAL_L2) ? -127 : 0;
+		control_intake(intake_power);
+		control_lift(lift_power);
 
 		pros::delay(20);
+		
 	}
 }
