@@ -2,4 +2,5 @@
 
 #include "main.h"
 
-void
+void control_intake(int power);
+void control_lift(int power);
