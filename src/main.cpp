@@ -142,24 +142,15 @@ void opcontrol() {
 
 	// User-controlled mode
 	pros::lcd::set_text(3, "User-controlled mode initialized");
+	std::uint32_t last_lcd_update = 0;
 
 	while (true) {
-		//print data
-		auto Velocity_List = left_mg.get_actual_velocity_all();
-		auto Right_Velocity_List = right_mg.get_actual_velocity_all();
-
-		// Combine list for easier manipulation
-		Velocity_List.insert(Velocity_List.end(),Right_Velocity_List.begin(),Right_Velocity_List.end());
-
-		for(int i=0; i<Velocity_List.size(); i++){
-			pros::lcd::print(i,"Motor %d: %.1f",i+1,Velocity_List[i]);
-		}
-		
 		// Handle controller connection status
 		if (!master.is_connected()) {
 			pros::delay(20);
 			continue;
 		}
+
 
 		// Get user input
 		int dir = master.get_analog(ANALOG_LEFT_Y);    // Gets amount forward/backward from left joystick
@@ -172,6 +163,18 @@ void opcontrol() {
 			master.get_digital(DIGITAL_L2) ? -127 : 0;
 		control_intake(intake_power);
 		control_lift(lift_power);
+
+		// Update diagnostics less often so LCD and sensor reads cannot delay control.
+		if (pros::millis() - last_lcd_update >= DEBUG_TIMEOUT) {
+			auto velocity_list = left_mg.get_actual_velocity_all();
+			auto right_velocity_list = right_mg.get_actual_velocity_all();
+			velocity_list.insert(velocity_list.end(), right_velocity_list.begin(), right_velocity_list.end());
+
+			for (std::size_t i = 0; i < velocity_list.size() && i < 8; i++) {
+				pros::lcd::print(static_cast<int>(i), "Motor %d: %.1f", static_cast<int>(i + 1), velocity_list[i]);
+			}
+			last_lcd_update = pros::millis();
+		}
 
 		pros::delay(20);
 		

@@ -4,25 +4,27 @@
 #include <cstdint>
 
 // ---------------------------------------
-// GLOABL VARIABLES & CONSTANTS
+// GLOBAL VARIABLES & CONSTANTS
 // ---------------------------------------
 
 extern std::uint32_t frame_count;
 extern const float ROBOT_SPEED;
 
 // ---------------------------------------
+// DEBUG PRINTS
+// ---------------------------------------
+
+extern const int DEBUG_TIMEOUT;
+
+// ---------------------------------------
 // ROBOT PARTS
 // ---------------------------------------
 
 extern pros::Controller master;
+extern pros::Motor m1;
+extern pros::Motor m2;
+extern pros::Motor m3;
 
-extern pros::Motor left_front;
-extern pros::Motor left_middle;
-extern pros::Motor left_back;
-
-extern pros::Motor right_front;
-extern pros::Motor right_front_middle;
-extern pros::Motor right_front_back;
 
 extern pros::MotorGroup left_mg;
 extern pros::MotorGroup right_mg;
