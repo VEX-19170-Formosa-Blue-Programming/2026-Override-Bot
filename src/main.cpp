@@ -144,7 +144,17 @@ void opcontrol() {
 	pros::lcd::set_text(3, "User-controlled mode initialized");
 
 	while (true) {
+		//print data
+		auto Velocity_List = left_mg.get_actual_velocity_all();
+		auto Right_Velocity_List = right_mg.get_actual_velocity_all();
 
+		// Combine list for easier manipulation
+		Velocity_List.insert(Velocity_List.end(),Right_Velocity_List.begin(),Right_Velocity_List.end());
+
+		for(int i=0; i<Velocity_List.size(); i++){
+			pros::lcd::print(i,"Motor %d: %.1f",i+1,Velocity_List[i]);
+		}
+		
 		// Handle controller connection status
 		if (!master.is_connected()) {
 			pros::delay(20);
