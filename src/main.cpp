@@ -161,13 +161,13 @@ void opcontrol() {
 			master.get_digital(DIGITAL_R2) ? -127 : 0;
 		const int lift_power = master.get_digital(DIGITAL_L1) ? 127 :
 			master.get_digital(DIGITAL_L2) ? -127 : 0;
-		control_intake(intake_power);
-		control_lift(lift_power);
+		// control_intake(intake_power);
+		// control_lift(lift_power);
 
 		// Update diagnostics less often so LCD and sensor reads cannot delay control.
 		if (pros::millis() - last_lcd_update >= DEBUG_TIMEOUT) {
-			auto velocity_list = left_mg.get_actual_velocity_all();
-			auto right_velocity_list = right_mg.get_actual_velocity_all();
+			auto velocity_list = left_main_mg.get_actual_velocity_all();
+			auto right_velocity_list = right_main_mg.get_actual_velocity_all();
 			velocity_list.insert(velocity_list.end(), right_velocity_list.begin(), right_velocity_list.end());
 
 			for (std::size_t i = 0; i < velocity_list.size() && i < 8; i++) {

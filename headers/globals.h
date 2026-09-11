@@ -21,15 +21,12 @@ extern const int DEBUG_TIMEOUT;
 // ---------------------------------------
 
 extern pros::Controller master;
-extern pros::Motor m1;
-extern pros::Motor m2;
-extern pros::Motor m3;
 
+extern pros::Motor support_left;
+extern pros::Motor support_right;
 
-extern pros::MotorGroup left_mg;
-extern pros::MotorGroup right_mg;
+extern pros::MotorGroup left_main_mg;
+extern pros::MotorGroup right_main_mg;
 
 extern pros::Imu imu_sensor;
 
-extern pros::MotorGroup intake;
-extern pros::MotorGroup lift;
