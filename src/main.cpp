@@ -168,11 +168,18 @@ void opcontrol() {
 		if (pros::millis() - last_lcd_update >= DEBUG_TIMEOUT) {
 			auto velocity_list = left_main_mg.get_actual_velocity_all();
 			auto right_velocity_list = right_main_mg.get_actual_velocity_all();
-			velocity_list.insert(velocity_list.end(), right_velocity_list.begin(), right_velocity_list.end());
 
+			auto leftSupportMotor = support_left.get_actual_velocity();
+			auto rightSupportMotor = support_right.get_actual_velocity();
+			
+			velocity_list.insert(velocity_list.end(), right_velocity_list.begin(), right_velocity_list.end());
+			velocity_list.insert(velocity_list.begin() + 2,leftSupportMotor);
+			velocity_list.insert(velocity_list.end(),rightSupportMotor);
+			
 			for (std::size_t i = 0; i < velocity_list.size() && i < 8; i++) {
-				pros::lcd::print(static_cast<int>(i), "Motor %d: %.1f", static_cast<int>(i + 1), velocity_list[i]);
+				pros::lcd::print(static_cast<int>(i), "Drivebase Motor %d: %.1f", static_cast<int>(i + 1), velocity_list[i]);
 			}
+			
 			last_lcd_update = pros::millis();
 		}
 
