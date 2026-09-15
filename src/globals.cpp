@@ -25,18 +25,14 @@ const int DEBUG_TIMEOUT = 1000;  // Timeout in milliseconds for debug prints
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 // Chassis
+pros::MotorGroup left_main_mg({-1, -10},pros::v5::MotorGears::blue);
+pros::MotorGroup right_main_mg({11, 20},pros::v5::MotorGears::blue);
 
-pros::Motor m1(-1, pros::E_MOTOR_GEAR_BLUE);
-pros::Motor m2(-2, pros::E_MOTOR_GEAR_GREEN);
-pros::Motor m3(-10, pros::E_MOTOR_GEAR_BLUE);
-
-pros::MotorGroup left_mg({-1,-2, -10});
-pros::MotorGroup right_mg({11, 12, 20});
+pros::Motor support_left(-2);
+pros::Motor support_right(12);
 
 // Sensors
 pros::Imu imu_sensor(17);
 
 // Intake
 
-// Lift
-pros::MotorGroup lift({7, -8}, pros::v5::MotorGears::blue);
