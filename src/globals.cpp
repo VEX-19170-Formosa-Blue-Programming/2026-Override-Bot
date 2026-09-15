@@ -30,7 +30,7 @@ pros::Motor m1(-1, pros::E_MOTOR_GEAR_BLUE);
 pros::Motor m2(-2, pros::E_MOTOR_GEAR_GREEN);
 pros::Motor m3(-10, pros::E_MOTOR_GEAR_BLUE);
 
-pros::MotorGroup left_mg({m1, m2, m3});
+pros::MotorGroup left_mg({-1,-2, -10});
 pros::MotorGroup right_mg({11, 12, 20});
 
 // Sensors
