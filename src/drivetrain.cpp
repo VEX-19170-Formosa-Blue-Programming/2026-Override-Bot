@@ -24,4 +24,9 @@ void stop_drive() {
 
 	support_left.brake();
 	support_right.brake();
+
+}
+
+void drive_foward(float distance){
+	
 }
