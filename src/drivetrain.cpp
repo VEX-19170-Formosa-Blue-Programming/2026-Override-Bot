@@ -16,6 +16,14 @@ void arcade_drive_offset(float dir, float turn, float speed) {
 }
 
 void stop_drive() {
-	left_mg.brake();
-	right_mg.brake();
+	left_main_mg.brake();
+	right_main_mg.brake();
+
+	support_left.brake();
+	support_right.brake();
+
+}
+
+void drive_foward(float distance){
+	
 }
