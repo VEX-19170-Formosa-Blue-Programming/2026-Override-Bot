@@ -10,6 +10,8 @@
 
 std::uint32_t frame_count = 0;
 const float ROBOT_SPEED = 1.0f;
+extern const float WHEEL_DIAMETER_INCHES = 2.0f;  // Diameter of the odometry wheels in inches
+extern const float ROTATE_TOLERANCE = 5.0f;  // Tolerance for rotation encoders in degrees
 
 // ---------------------------------------
 // DEBUG PRINTS
@@ -33,6 +35,3 @@ pros::Motor support_right(12);
 
 // Sensors
 pros::Imu imu_sensor(17);
-
-// Intake
-

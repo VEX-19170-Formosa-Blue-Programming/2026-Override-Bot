@@ -4,6 +4,8 @@
 
 #include "drivetrain.h"
 #include "globals.h"
+#include <cmath>
+
 // Arcade control scheme
 
 void arcade_drive_offset(float dir, float turn, float speed) {
@@ -15,7 +17,6 @@ void arcade_drive_offset(float dir, float turn, float speed) {
 
 	support_left.move(left_power);
 	support_right.move(right_power);
-
 }
 
 void stop_drive() {
@@ -27,6 +28,24 @@ void stop_drive() {
 
 }
 
-void drive_foward(float distance){
-	
+void drive_forward_inches(double inches) {
+    // Assumes the motor turns once for each wheel turn.
+    const double target_degrees =
+        inches / (M_PI * WHEEL_DIAMETER_INCHES) * 360.0;
+
+    left_main_mg.tare_position();
+    right_main_mg.tare_position();
+
+    left_main_mg.move_relative(target_degrees, 100);
+    right_main_mg.move_relative(target_degrees, 100);
+    support_left.move_relative(target_degrees, 100);
+    support_right.move_relative(target_degrees, 100);
+
+    // Wait until the main drive encoders are close to their targets.
+    while (std::fabs(left_main_mg.get_position() - target_degrees) > ROTATE_TOLERANCE ||
+           std::fabs(right_main_mg.get_position() - target_degrees) > ROTATE_TOLERANCE) {
+        pros::delay(10);
+    }
+
+    stop_drive();
 }

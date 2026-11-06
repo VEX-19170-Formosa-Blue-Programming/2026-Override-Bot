@@ -90,32 +90,14 @@ void autonomous() {
 
 	pros::lcd::set_text(3, "Autonomous mode initialized");
 
-	frame_count = 0;  // Reset frame count
-	const float auton_time_limit = 10.0f;  // Time in seconds for autonomous mode
+	// ===========================================
+	// BEGIN AUTONOMOUS ROUTINE
+	
+	drive_forward_inches(24);
 
-	while (true) {
-		float elapsed = frame_count * 0.02f;
-		if (elapsed >= auton_time_limit) {
-			break;
-		}
-
-		if (master.get_digital(DIGITAL_UP)) {
-			stop_drive();
-			pros::lcd::set_text(3, "User-controlled mode initialized");
-			return;  // Exit autonomous mode early if the up button is pressed
-		}
-
-		// Move the robot in a circle.
-		// mult by 127 to match the -127..127 range
-		arcade_drive_offset(sin(frame_count * 0.1) * 127.0, cos(frame_count * 0.1) * 127.0, ROBOT_SPEED);
-
-		pros::lcd::set_text(4, "Time left: " + std::to_string(auton_time_limit - elapsed) + " seconds");
-
-		pros::delay(20);
-		frame_count++;
-	}
-	stop_drive();
-
+	// END AUTONOMOUS ROUTINE
+	// ===========================================
+	
 	pros::lcd::set_text(4, "Autonomous mode complete");
 
 	int countdown = 3;
