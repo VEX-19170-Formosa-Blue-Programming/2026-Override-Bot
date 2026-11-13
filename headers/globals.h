@@ -13,6 +13,13 @@ extern std::uint32_t frame_count;
 extern const float ROBOT_SPEED;
 extern const float WHEEL_DIAMETER_INCHES;
 extern const float ROTATE_TOLERANCE;
+extern const float DRIVE_PID_KP;
+extern const float DRIVE_PID_KI;
+extern const float DRIVE_PID_KD;
+extern const float DRIVE_PID_MAX_POWER;
+extern const float DRIVE_PID_MAX_INTEGRAL_OUTPUT;
+extern const std::uint32_t DRIVE_PID_TIMEOUT_MS;
+extern const std::uint32_t DRIVE_PID_SETTLE_TIME_MS;
 
 // ---------------------------------------
 // DEBUG PRINTS

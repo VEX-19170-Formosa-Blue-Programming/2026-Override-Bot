@@ -93,12 +93,14 @@ void autonomous() {
 	// ===========================================
 	// BEGIN AUTONOMOUS ROUTINE
 	
-	drive_forward_inches(24);
+	const bool drive_completed = drive_forward_inches(24);
 
 	// END AUTONOMOUS ROUTINE
 	// ===========================================
-	
-	pros::lcd::set_text(4, "Autonomous mode complete");
+
+	pros::lcd::set_text(4, drive_completed
+		? "Autonomous mode complete"
+		: "Autonomous drive timed out");
 
 	int countdown = 3;
 	while (countdown > 0) {
