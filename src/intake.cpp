@@ -5,6 +5,6 @@
 // 	intake.move(power);
 // }
 
-// void control_lift(int power) {
-// 	lift.move(power);
-// }
+void control_lift(int power) {
+	lift.move(power);
+}

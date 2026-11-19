@@ -32,7 +32,7 @@ extern const int DEBUG_TIMEOUT;
 // ---------------------------------------
 
 extern pros::Controller master;
-
+extern pros::MotorGroup lift;
 extern pros::Motor support_left;
 extern pros::Motor support_right;
 

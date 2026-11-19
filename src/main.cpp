@@ -19,6 +19,8 @@
 #include <algorithm>
 #include <cmath>
 
+
+
 // https://pros.cs.purdue.edu/v5/api/cpp/motors.html
 
 // A callback function for LLEMU's center button.
@@ -38,6 +40,7 @@ void on_center_button() {
  * All other competition modes are blocked by initialize
  */
 void initialize() {
+	lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	imu_sensor.reset();
 	pros::delay(1000);
 	pros::lcd::initialize();
@@ -141,12 +144,12 @@ void opcontrol() {
 		int turn = master.get_analog(ANALOG_RIGHT_X);  // Gets the turn left/right from right joystick
 		arcade_drive_offset(dir, turn, ROBOT_SPEED);
 
-		const int intake_power = master.get_digital(DIGITAL_R1) ? 127 :
-			master.get_digital(DIGITAL_R2) ? -127 : 0;
-		const int lift_power = master.get_digital(DIGITAL_L1) ? 127 :
-			master.get_digital(DIGITAL_L2) ? -127 : 0;
+		// const int intake_power = master.get_digital(DIGITAL_R1) ? 127 :
+		// 	master.get_digital(DIGITAL_R2) ? -127 : 0;
+		const int lift_power = master.get_digital(DIGITAL_R1) ? 127 :
+			master.get_digital(DIGITAL_L1) ? -127 : 0;
 		// control_intake(intake_power);
-		// control_lift(lift_power);
+		control_lift(lift_power);
 
 		// Update diagnostics less often so LCD and sensor reads cannot delay control.
 		if (pros::millis() - last_lcd_update >= DEBUG_TIMEOUT) {
