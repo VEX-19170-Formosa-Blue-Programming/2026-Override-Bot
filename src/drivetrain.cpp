@@ -58,7 +58,7 @@ void stop_drive() {
 bool drive_forward_inches(double inches) {
     // Assumes the motor turns once for each wheel turn.
     const double target_degrees =
-        (inches / (M_PI * 2.75)) * 360.0 * (3.0 / 4.0);
+        (inches / (M_PI * WHEEL_DIAMETER_INCHES)) * 360.0 * (3.0 / 4.0);
 
     left_main_mg.tare_position();
     right_main_mg.tare_position();

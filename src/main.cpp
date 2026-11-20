@@ -39,6 +39,7 @@ void on_center_button() {
  *
  * All other competition modes are blocked by initialize
  */
+
 void initialize() {
 	lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	imu_sensor.reset();
@@ -54,6 +55,7 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
+
 void disabled() {
 
 }
@@ -67,6 +69,7 @@ void disabled() {
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
+
 void competition_initialize() {
 
 }
@@ -130,6 +133,7 @@ void opcontrol() {
 	// User-controlled mode
 	pros::lcd::set_text(3, "User-controlled mode initialized");
 	std::uint32_t last_lcd_update = 0;
+	bool arm_calibration_warning_shown = false;
 
 	while (true) {
 		// Handle controller connection status
@@ -149,7 +153,13 @@ void opcontrol() {
 		const int lift_power = master.get_digital(DIGITAL_R1) ? 127 :
 			master.get_digital(DIGITAL_L1) ? -127 : 0;
 		// control_intake(intake_power);
-		control_lift(lift_power);
+		const bool lower_arm = master.get_digital_new_press(DIGITAL_L2);
+		control_lift(lift_power, lower_arm);
+		if (!arm_calibration_warning_shown && !lift_limits_configured()) {
+			master.print(1, 0, "ARM DISABLED");
+			master.print(2, 0, "Set arm limits");
+			arm_calibration_warning_shown = true;
+		}
 
 		// Update diagnostics less often so LCD and sensor reads cannot delay control.
 		if (pros::millis() - last_lcd_update >= DEBUG_TIMEOUT) {

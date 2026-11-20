@@ -20,6 +20,8 @@ extern const float DRIVE_PID_MAX_POWER;
 extern const float DRIVE_PID_MAX_INTEGRAL_OUTPUT;
 extern const std::uint32_t DRIVE_PID_TIMEOUT_MS;
 extern const std::uint32_t DRIVE_PID_SETTLE_TIME_MS;
+extern const float ARM_GROUND_POSITION_DEGREES;
+extern const float ARM_UPPER_POSITION_DEGREES;
 
 // ---------------------------------------
 // DEBUG PRINTS
